@@ -35,7 +35,7 @@
     <br/>
     <div class="form-group row" style="margin-left : 100px;">
         <label for="remMe" class="form-check-label mx-1">Remember me</label>
-        <input type="checkbox" name="remeberMe" id = "remMe" class = "form-check-input" />
+        <input type="checkbox" name="remember_me" id = "remMe" class = "form-check-input" />
     </div>
     <br/>
     <button class="btn btn-primary mx-5 my-2" type="submit">Login</button>

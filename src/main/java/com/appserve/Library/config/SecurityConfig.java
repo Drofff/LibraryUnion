@@ -1,6 +1,7 @@
 package com.appserve.Library.config;
 
 import com.appserve.Library.component.UserDetailsServiceImpl;
+import com.appserve.Library.entity.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,6 +20,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/", "/login", "/registration", "/recover", "/activate*")
                 .permitAll()
+                .antMatchers("/documentsOfLibraries")
+                .hasAuthority(Role.ADMIN.getAuthority())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -32,9 +35,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .and()
                 .rememberMe()
-                .rememberMeParameter("remeberMe")
-                .tokenValiditySeconds(8000)
+                .rememberMeParameter("remember_me")
+                .rememberMeCookieName("session_key")
                 .userDetailsService(userDetailsService());
+
     }
 
     @Override

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Library - Welcome</title>
+    <title>Library - Profile</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -13,21 +13,23 @@
 <nav class="navbar navbar-light bg-primary" >
     <a class="navbar-brand" href="/"><font color="white">Library</font></a>
 </nav>
+<#if card??>
 <div class="card text-center mx-auto my-5" style="width : 50%;">
-    <div class="card-body">
-        <p class="card-text" style="font-size:30;">Welcome to <font color="#1E90FF"><b>Library Union</b></font></p>
-        <p class="card-text">We unite libraries, from all around the world and their readers, to provide fast and efficient way for book reservation and searching</p>
-        <p class="card-text mb-2">There are ${libCount} libraries and ${bookCount} books in our system right now</p>
-        <hr/>
-        <p class="card-text mt-2"><b>Want to join us?</b></p>
-        <a href="/login" class="card-link mt-2 btn btn-success">Login</a>
-        <a href="/registration" class="card-link mt-2 btn btn-success">Registration</a>
-        <br/>
-        <img src="http://www.selbyvillelibrary.org/images/SelbyvilleLibrary_Logo_no_text.png" class="mt-5" style="width:100px; height:100px"/>
+    <div class="card-header text-center">
+        <img src="${card.photoUrl}" class="rounded-circle my-2" height="150px" width="150px" />
+        <h5 class="card-title mt-2">${card.firstName} ${card.lastName}</h5>
+    </div>
+    <div class="card-body text-left">
+        <p class="card-text">Birthday: ${card.dateOfBirthday}</p>
+        <p class="card-text">Address: ${card.address}</p>
+        <p class="card-text">Books renting: ${card.booksTaken?size}</p>
+        <p class="card-text">Subscription type: <#if subscription == 'REGULAR'> <span class="badge badge-success"> ${subscription} </span> <#else> <span class="badge badge-pill badge-warning"> <font color="white">${subscription}</font> </span> </#if></p>
+        <p class="card-text"><a href="/changeProfile">Edit</a></p>
     </div>
     <div class="card-footer text-muted">
         Library Union - We are always near by
     </div>
 </div>
+</#if>
 </body>
 </html>

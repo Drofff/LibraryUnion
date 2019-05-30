@@ -1,6 +1,7 @@
 package com.appserve.Library.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Entity
@@ -10,10 +11,13 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "Book must have a name")
     private String name;
 
+    @NotBlank(message = "Who is author of this book?")
     private String author;
 
+    @NotBlank(message = "Describe this book please")
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -22,8 +26,15 @@ public class Book {
 
     private int rate;
 
+    @NotBlank(message = "Select book type, please")
+    private String type;
+
+    @NotBlank(message = "When was it published?")
+    private String year;
+
     private LocalDate dateWhenTaken;
 
+    @NotBlank(message = "Please, provide photo")
     private String photoUrl;
 
     private Subscription subscriptionType;
@@ -33,6 +44,22 @@ public class Book {
     private User libraryOwner;
 
     public Book() {}
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
 
     public Long getId() {
         return id;

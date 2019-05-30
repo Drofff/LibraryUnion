@@ -1,19 +1,27 @@
 package com.appserve.Library.service;
 
+import com.appserve.Library.entity.Library;
 import com.appserve.Library.entity.User;
+import com.appserve.Library.repository.LibraryAccountRepository;
 import com.appserve.Library.repository.UserRepository;
+import com.paypal.base.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
@@ -29,6 +37,9 @@ public class AccountActivationService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LibraryAccountRepository libraryAccountRepository;
 
     private Map<String, String> activationTokens = new HashMap<>();
 
@@ -75,6 +86,24 @@ public class AccountActivationService {
         String passwd = userPasswords.get(username);
         userPasswords.remove(username);
         return passwd;
+    }
+
+    public List<Library> getApplications() {
+        List<Library> libraries = libraryAccountRepository.findAll().stream().filter(x -> !x.isActivated()).collect(Collectors.toList());
+
+        for (Library library : libraries) {
+
+            try {
+                String photoUrl = new String(Base64.encodeBase64(Files.readAllBytes(Paths.get("./libraryDocs/" + library.getDocumentUrl()))));
+                photoUrl = "data:img/png;base64," + photoUrl;
+                library.setDocumentUrl(photoUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return libraries;
     }
 
 }

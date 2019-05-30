@@ -1,7 +1,9 @@
 package com.appserve.Library.component;
 
+import com.appserve.Library.entity.Library;
 import com.appserve.Library.entity.LibraryCard;
 import com.appserve.Library.entity.User;
+import com.appserve.Library.repository.LibraryAccountRepository;
 import com.appserve.Library.repository.LibraryRepository;
 import com.appserve.Library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +22,37 @@ public class LibraryCardInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     LibraryRepository libraryRepository;
 
+    @Autowired
+    LibraryAccountRepository accountRepository;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        User user = userRepository.findByUsername(request.getUserPrincipal().getName());
 
-        if (user != null) {
+        if (request.getUserPrincipal() != null) {
 
-            LibraryCard card = libraryRepository.findByUserId(user);
+            User user = userRepository.findByUsername(request.getUserPrincipal().getName());
 
-            if (card == null) {
-                if (!request.getRequestURI().equals("/libraryCard") && !request.getRequestURI().equals("/makeLibraryCard")) {
-                    response.sendRedirect("/makeLibraryCard");
-                    return false;
+            if (user != null) {
+
+                LibraryCard card = libraryRepository.findByUserId(user);
+                Library library = accountRepository.findByAccount(user);
+
+
+                if (card == null && library == null) {
+                    if (isProtected(request.getRequestURI())) {
+                        response.sendRedirect("/makeLibraryCard");
+                        return false;
+                    }
                 }
+
             }
+
         }
 
         return true;
+    }
+
+    public boolean isProtected(String url) {
+        return !url.equals("/libraryCard") && !url.equals("/makeLibraryCard") && !url.equals("/libraryAccount");
     }
 }

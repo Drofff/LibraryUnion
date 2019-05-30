@@ -119,7 +119,6 @@ public class LibraryCard {
         this.cardSubscriptions = cardSubscriptions;
     }
 
-    //TODO on main page say to user which books must be returned in which time and on main tab which must be returned during 2 days
 
 
 
